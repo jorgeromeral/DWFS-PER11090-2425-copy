@@ -1,4 +1,3 @@
-const { Console } = require("console");
 
 // Definir el tamaño de la matriz de butacas
 const N = 10; // Número de filas y columnas
@@ -23,36 +22,31 @@ function setup() {
 }
 
 function suggest(butacas, reserva) {
+
     for (let i = butacas.length - 1; i >= 0; i--) {
-        let maxContador = 0; // Número MÁXIMO de asientos libres consecutivos por fila
         let contador = 0; // Número de asientos libres consecutivos
-        let asientos = []; // Array con los asientos libres consecutivos por fila
-        let fila = butacas[i];
+        let asientosLibres = []; // Array con los asientos libres consecutivos por fila
 
-        for (let j = 0; j < fila.length; j++) {
-            if (butacas[i][j].estado === false) {
+        for (let j = 0; j < (butacas[i].length - reserva); j++) {
+        if (butacas[i][j].estado == false) {
                 contador++;
-                asientos.push(butacas[i][j].id);
-                if (contador > maxContador) { // Si el contador es mayor que el máximo, se actualiza
-                    maxContador = contador;
-                }
-            } else {
-                contador = 0;
-                asientos = [];
-            }
-
-            if (maxContador >= reserva) {
-                for (let k = 0; k < reserva; k++) {
-                    let asientoId = asientos[k];
-                    for (let x = 0; x < butacas.length; x++) {
-                        for (let y = 0; y < butacas[x].length; y++) {
-                            if (butacas[x][y].id === asientoId) {
-                                butacas[x][y].estado = true;
+                asientosLibres.push(butacas[i][j].id);
+                if (contador === reserva) { // Si el numero de asientos seguidos es igual a la reserva
+                    
+                    // Cambiar el estado de los asientos a ocupados (true)
+                    for (let k = 0; k < asientosLibres.length; k++) {
+                        let asientoId = asientosLibres[k];
+                        for (let m = 0; m < butacas[i].length; m++) {
+                            if (butacas[i][m].id === asientoId) {
+                                butacas[i][m].estado = true;
                             }
                         }
                     }
+                    return (asientosLibres) // Devolver los asientos
                 }
-                return asientos.slice(0, reserva);
+            } else {
+                contador = 0;
+                asientosLibres = [];
             }
         }
     }
