@@ -22,17 +22,19 @@ function setup() {
 
 function suggest(reserva) {
     let butacas = setup();
+    let asientos = [];
+    let asientosEncontrados = false;
 
     for (let i = butacas.length - 1; i >= 0; i--) {
         let contador = 0; // Número de asientos libres consecutivos
         let asientosLibres = []; // Array con los asientos libres consecutivos por fila
 
         for (let j = 0; j < (butacas[i].length); j++) {
-            if (butacas[i][j].estado == false) {
+            if (butacas[i][j].estado == false && !asientosEncontrados) {
                 contador++;
                 asientosLibres.push(butacas[i][j].id);
 
-                if (contador === reserva) { // Si el numero de asientos seguidos es igual a la reserva
+                if (contador === reserva && !asientosEncontrados) { // Si el numero de asientos seguidos es igual a la reserva
                     // Cambiar el estado de los asientos a ocupados (true)
                     for (let k = 0; k < asientosLibres.length; k++) {
                         let asientoId = asientosLibres[k];
@@ -42,8 +44,8 @@ function suggest(reserva) {
                             }
                         }
                     }
-                    return console.log(`Se encontraron ${reserva} asientos consecutivos:`,asientosLibres) // Devolver los asientos
-                    
+                    asientos = asientosLibres;  
+                    asientosEncontrados = true;              
                 }
             } else {
                 contador = 0;
@@ -51,5 +53,5 @@ function suggest(reserva) {
             }
         }
     }
-    return console.log("No hay asientos libres"); // No se encontraron suficientes asientos consecutivos
+    return console.log(`Se encontraron ${reserva} asientos consecutivos:`,asientos) // Devolver los asientos
 }

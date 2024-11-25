@@ -22,17 +22,18 @@ function setup() {
 }
 
 function suggest(butacas, reserva) {
-
+    let asientos = [];
+    let asientosEncontrados = false;
     for (let i = butacas.length - 1; i >= 0; i--) {
         let contador = 0; // Número de asientos libres consecutivos
         let asientosLibres = []; // Array con los asientos libres consecutivos por fila
 
-        for (let j = 0; j < (butacas[i].length - reserva); j++) {
-        if (butacas[i][j].estado == false) {
+        for (let j = 0; j < (butacas[i].length); j++) {
+            if (butacas[i][j].estado == false && !asientosEncontrados) {
                 contador++;
                 asientosLibres.push(butacas[i][j].id);
-                if (contador === reserva) { // Si el numero de asientos seguidos es igual a la reserva
-                    
+                
+                if (contador === reserva ) { // Si el numero de asientos seguidos es igual a la reserva
                     // Cambiar el estado de los asientos a ocupados (true)
                     for (let k = 0; k < asientosLibres.length; k++) {
                         let asientoId = asientosLibres[k];
@@ -42,7 +43,8 @@ function suggest(butacas, reserva) {
                             }
                         }
                     }
-                    return (asientosLibres) // Devolver los asientos
+                    asientos = asientosLibres; // Devolver los asientos
+                    asientosEncontrados = true;
                 }
             } else {
                 contador = 0;
@@ -50,7 +52,7 @@ function suggest(butacas, reserva) {
             }
         }
     }
-    return null; // No se encontraron suficientes asientos consecutivos
+    return asientos; // No se encontraron suficientes asientos consecutivos
 }
 
 // Inicializar la matriz
